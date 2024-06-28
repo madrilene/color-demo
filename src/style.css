@@ -89,7 +89,7 @@
 }
 
 /* Cursor styles */
-:where(button, label, select, summary, [role='button'], [role='option']) {
+:where(button, label, select, summary, [role='button'], [role='option'], [type='color']) {
   cursor: pointer;
 }
 
@@ -124,8 +124,8 @@
 :root {
   /* font sizes */
   /* https://utopia.fyi/type/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75%7C0.5%7C0.25,1.5%7C2%7C3%7C4%7C6,s-l&g=s,l,xl,12 */
-  --size-step--2: clamp(0.7813rem, 0.7747rem + 0.0326vi, 0.8rem);
-  --size-step--1: clamp(0.9375rem, 0.9158rem + 0.1087vi, 1rem);
+  --size-step-min-2: clamp(0.7813rem, 0.7747rem + 0.0326vi, 0.8rem);
+  --size-step-min-1: clamp(0.9375rem, 0.9158rem + 0.1087vi, 1rem);
   --size-step-0: clamp(1.125rem, 1.0815rem + 0.2174vi, 1.25rem);
   --size-step-1: clamp(1.35rem, 1.2761rem + 0.3696vi, 1.5625rem);
   --size-step-2: clamp(1.62rem, 1.5041rem + 0.5793vi, 1.9531rem);
@@ -157,7 +157,6 @@
   --space-s-l: clamp(1.125rem, 0.6467rem + 2.3913vi, 2.5rem);
 
   /* semantic variables */
-
   --gutter: var(--space-s-m);
   --wrapper-width: clamp(16rem, 98vw, 65rem);
   --text-size-base: var(--size-step-0);
@@ -167,7 +166,16 @@
   --font-base: system-ui, sans-serif;
   --leading: 1.5;
   --leading-fine: 1.2;
-  --accent-color: deeppink;
+
+  /* color variations */
+  --color-light: color-mix(in oklab, var(--color) 5%, white);
+  --color-dark: color-mix(in oklab, var(--color) 20%, black);
+
+  /* using light-dark() */
+  --color-text: light-dark(var(--color-dark), var(--color-light));
+  --color-bg: light-dark(var(--color-light), var(--color-dark));
+  --color-bg-alt: color-mix(in oklab, var(--color-bg) 95%, var(--color-text));
+  --color-line: color-mix(in oklab, var(--color-text) 10%, transparent);
 
   /* color scheme */
   &:has(input[name='color-scheme'][value='light dark']:checked) {
@@ -193,9 +201,9 @@ body {
   line-height: var(--leading);
   display: flex;
   flex-direction: column;
-  color: CanvasText;
-  background-color: Canvas;
-  accent-color: var(--accent-color);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  accent-color: var(--color);
 }
 
 main {
@@ -213,11 +221,11 @@ h1 {
 }
 
 h2 {
-  font-size: var(--text-size-heading-2);
+  font-size: var(--text-size-heading-3);
 }
 
 h3 {
-  font-size: var(--text-size-heading-3);
+  font-size: var(--text-size-heading-base);
 }
 
 p,
@@ -236,6 +244,13 @@ a {
   text-decoration-thickness: 0.08em;
 }
 
+input,
+textarea {
+  background: transparent;
+  padding: var(--space-3xs);
+  border: 2px solid var(--color-text);
+}
+
 /* Focus styles */
 :focus-visible {
   outline: 3px solid;
@@ -244,7 +259,7 @@ a {
 
 /* Text selection */
 ::selection {
-  background-color: var(--accent-color);
+  background-color: var(--color);
   color: currentColor;
 }
 
@@ -313,4 +328,63 @@ a {
   position: absolute;
   width: 1px;
   white-space: nowrap;
+}
+
+article {
+  --flow-space: var(--space-s-m);
+}
+
+.section {
+  background-color: var(--color-bg-alt);
+}
+
+.color-picker {
+  padding-block-start: var(--space-s);
+}
+
+:not(pre) > code {
+  background-color: var(--color-line);
+  padding: 0.05em 0.2em;
+}
+
+pre[class*='language-'] {
+  border: 0.15em solid var(--color-text);
+  background-color: var(--color-line);
+  margin: 0;
+  max-width: calc(100vi - 2rem);
+  overflow: auto;
+  padding: 0.5em 1em;
+}
+
+code[class*='language-'],
+pre[class*='language-'] {
+  word-wrap: normal;
+  background: none;
+  hyphens: none;
+  tab-size: 4;
+  text-align: left;
+  white-space: pre;
+  word-break: normal;
+  word-spacing: normal;
+  font-size: 0.9em;
+}
+
+.button {
+  color: var(--button-text, var(--color-text));
+  background-color: var(--button-bg, var(--color-bg-alt));
+  border: 2px solid var(--button-border, var(--color-text));
+  display: inline-block;
+  font: inherit;
+  padding: 0 var(--space-2xs);
+  text-decoration: none;
+  text-align: center;
+}
+
+.button:hover {
+  background-size: 150% 150%;
+  --button-border: var(--color);
+}
+
+.button:active {
+  transform: scale(99%);
 }

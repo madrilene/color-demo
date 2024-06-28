@@ -1,0 +1,41 @@
+<h2 id="accent-color">Paint user-interface controls with <code>accent-color</code></h2>
+
+<p>
+  The <code>accent-color</code> is in all major browsers since 2022. As of now, it tints
+  four elements: checkbox, radio, range and progress. As there is a default browser style
+  for all elements, this is a progressive enhancement, that does not break older browsers.
+  Safari's new switch element also applies this color, but as it is only available in
+  Safari Technology Preview as of june 2024, I will now showcase it.
+</p>
+
+<details>
+  <summary>Toggle CSS</summary>
+
+  {% highlight "css" %} body { accent-color: var(--color); } {% endhighlight %}
+</details>
+
+<p>
+  <label>
+    Checkbox:
+    <input type="checkbox" checked />
+  </label>
+</p>
+
+<p>
+  <label>
+    Radio Button:
+    <input type="radio" name="test" checked />
+  </label>
+</p>
+
+<p>
+  <label class="cluster">
+    Range Slider:
+    <input type="range" min="0" max="100" value="50" />
+  </label>
+</p>
+
+<p class="cluster">
+  Progress bar:
+  <progress value="70" max="100">70 %</progress>
+</p>
